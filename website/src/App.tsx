@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Search, 
@@ -18,7 +19,8 @@ import {
   Droplets,
   BarChart3,
   Rocket,
-  ChevronDown
+  ChevronDown,
+  FileText
 } from 'lucide-react';
 import { MOCK_APPS, AppData } from './types';
 
@@ -225,7 +227,7 @@ function AppDetail({ app, onBack }: { app: AppData, onBack: () => void }) {
           <div className="flex justify-between items-start">
             <div className="space-y-3">
               <h2 className="text-5xl sm:text-7xl font-black tracking-tighter leading-none">{app.name}</h2>
-              <p className="text-xl opacity-50 font-medium">Your personal AI diet coach</p>
+              <p className="text-xl opacity-50 font-medium">Your AI assistant. Use images and voice to get things done.</p>
               <div className="flex gap-2 pt-3">
                 {app.tags.map(tag => (
                   <span key={tag} className="text-[10px] font-black uppercase tracking-widest bg-lime-400/10 text-lime-400 border border-lime-400/20 px-4 py-2 rounded-full flex items-center gap-2">
@@ -240,9 +242,19 @@ function AppDetail({ app, onBack }: { app: AppData, onBack: () => void }) {
             </button>
           </div>
 
-          <button className="w-full sm:w-auto btn-glossy-dark px-16 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all">
-            Open App <ExternalLink className="w-5 h-5 opacity-60" />
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <button className="btn-glossy-dark px-16 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all">
+              Open App <ExternalLink className="w-5 h-5 opacity-60" />
+            </button>
+            {app.id === 'orange-ai' && (
+              <Link
+                to="/orange-ai/privacy-policy"
+                className="inline-flex items-center gap-2 px-6 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-xs border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all"
+              >
+                <FileText className="w-4 h-4 opacity-60" /> Privacy Policy
+              </Link>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 py-10 border-y border-white/5">
             <DetailStat label="Trading Volume" value={app.vol24h} />
