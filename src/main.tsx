@@ -4,26 +4,42 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ClerkProvider, AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 import App from './App.tsx';
 import OrangeAIPrivacyPolicy from './OrangeAIPrivacyPolicy.tsx';
+import LLmlitePrivacyPolicy from './LLmlitePrivacyPolicy.tsx';
 import './index.css';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerkEnabled =
+  typeof PUBLISHABLE_KEY === 'string' &&
+  PUBLISHABLE_KEY.startsWith('pk_') &&
+  !PUBLISHABLE_KEY.includes('YOUR_CLERK_PUBLISHABLE_KEY');
 
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Add your Clerk Publishable Key to the .env file');
+if (!clerkEnabled) {
+  // Keep the storefront usable in environments where Clerk is not configured.
+  console.warn('Clerk is disabled: set a valid VITE_CLERK_PUBLISHABLE_KEY to enable auth.');
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+    {clerkEnabled ? (
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/orange-ai/privacy-policy" element={<OrangeAIPrivacyPolicy />} />
+            <Route path="/llmlite/privacy-policy" element={<LLmlitePrivacyPolicy />} />
+
+            <Route path="/sso-callback" element={<AuthenticateWithRedirectCallback />} />
+          </Routes>
+        </BrowserRouter>
+      </ClerkProvider>
+    ) : (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/orange-ai/privacy-policy" element={<OrangeAIPrivacyPolicy />} />
-          <Route path="/llmlite/privacy-policy" element={<OrangeAIPrivacyPolicy />} />
-
-          <Route path="/sso-callback" element={<AuthenticateWithRedirectCallback />} />
+          <Route path="/llmlite/privacy-policy" element={<LLmlitePrivacyPolicy />} />
         </Routes>
       </BrowserRouter>
-    </ClerkProvider>
+    )}
   </StrictMode>,
 );

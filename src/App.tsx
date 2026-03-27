@@ -25,6 +25,11 @@ import {
 import { MOCK_APPS, AppData } from './types';
 import { SignedIn, SignedOut, UserButton, useSignIn } from '@clerk/clerk-react';
 
+const clerkEnabled =
+  typeof import.meta.env.VITE_CLERK_PUBLISHABLE_KEY === 'string' &&
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY.startsWith('pk_') &&
+  !import.meta.env.VITE_CLERK_PUBLISHABLE_KEY.includes('YOUR_CLERK_PUBLISHABLE_KEY');
+
 export default function App() {
   const [isDark, setIsDark] = useState(true);
   const [selectedApp, setSelectedApp] = useState<AppData | null>(null);
@@ -78,19 +83,27 @@ export default function App() {
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
-            <SignedOut>
-              <GoogleSignInButton />
-            </SignedOut>
+            {clerkEnabled ? (
+              <>
+                <SignedOut>
+                  <GoogleSignInButton />
+                </SignedOut>
 
-            <SignedIn>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: 'w-8 h-8',
-                  },
-                }}
-              />
-            </SignedIn>
+                <SignedIn>
+                  <UserButton
+                    appearance={{
+                      elements: {
+                        userButtonAvatarBox: 'w-8 h-8',
+                      },
+                    }}
+                  />
+                </SignedIn>
+              </>
+            ) : (
+              <span className="text-[10px] uppercase tracking-widest text-white/40">
+                Auth disabled
+              </span>
+            )}
           </div>
         </div>
       </nav>
