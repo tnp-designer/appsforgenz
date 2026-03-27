@@ -23,6 +23,7 @@ import {
   FileText
 } from 'lucide-react';
 import { MOCK_APPS, AppData } from './types';
+import { SignedIn, SignedOut, UserButton, useSignIn } from '@clerk/clerk-react';
 
 export default function App() {
   const [isDark, setIsDark] = useState(true);
@@ -76,10 +77,20 @@ export default function App() {
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            
-            <button className="bg-white text-black px-5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider hover:scale-105 active:scale-95 transition-all">
-              Login
-            </button>
+
+            <SignedOut>
+              <GoogleSignInButton />
+            </SignedOut>
+
+            <SignedIn>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: 'w-8 h-8',
+                  },
+                }}
+              />
+            </SignedIn>
           </div>
         </div>
       </nav>
@@ -331,5 +342,27 @@ function Stat({ label, value, icon }: { label: string, value: string, icon: Reac
       </p>
       <p className="text-3xl font-bold tracking-tighter">{value}</p>
     </div>
+  );
+}
+
+function GoogleSignInButton() {
+  const { isLoaded, signIn } = useSignIn();
+
+  const handleGoogleSignIn = async () => {
+    if (!isLoaded) return;
+    await signIn.authenticateWithRedirect({
+      strategy: 'oauth_google',
+      redirectUrl: '/sso-callback',
+      redirectUrlComplete: '/',
+    });
+  };
+
+  return (
+    <button
+      onClick={handleGoogleSignIn}
+      className="bg-white text-black px-5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider hover:scale-105 active:scale-95 transition-all"
+    >
+      Continue with Google
+    </button>
   );
 }
