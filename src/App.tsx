@@ -7,17 +7,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Search, 
-  Menu, 
   Moon, 
   Sun, 
   ChevronLeft, 
   ExternalLink, 
   Share2, 
   CheckCircle2,
-  TrendingUp,
-  Droplets,
-  BarChart3,
   Rocket,
   ChevronDown,
   FileText
@@ -219,6 +214,14 @@ const AppCard: React.FC<{ app: AppData, onClick: () => void }> = ({ app, onClick
           </button>
         </div>
       </div>
+
+      <Link
+        to={app.privacyPolicyPath}
+        onClick={(event) => event.stopPropagation()}
+        className="mt-4 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors"
+      >
+        <FileText className="w-3.5 h-3.5 opacity-60" /> Privacy Policy
+      </Link>
     </div>
   );
 }
@@ -251,7 +254,7 @@ function AppDetail({ app, onBack }: { app: AppData, onBack: () => void }) {
           <div className="flex justify-between items-start">
             <div className="space-y-3">
               <h2 className="text-5xl sm:text-7xl font-black tracking-tighter leading-none">{app.name}</h2>
-              <p className="text-xl opacity-50 font-medium">Your AI assistant. Use images and voice to get things done.</p>
+              <p className="text-xl opacity-50 font-medium">{app.subtitle}</p>
               <div className="flex gap-2 pt-3">
                 {app.tags.map(tag => (
                   <span key={tag} className="text-[10px] font-black uppercase tracking-widest bg-lime-400/10 text-lime-400 border border-lime-400/20 px-4 py-2 rounded-full flex items-center gap-2">
@@ -268,16 +271,14 @@ function AppDetail({ app, onBack }: { app: AppData, onBack: () => void }) {
 
           <div className="flex flex-wrap items-center gap-4">
             <button className="btn-glossy-dark px-16 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all">
-              Open App <ExternalLink className="w-5 h-5 opacity-60" />
+              {app.openAppLabel} <ExternalLink className="w-5 h-5 opacity-60" />
             </button>
-            {app.id === 'orange-ai' && (
-              <Link
-                to="/orange-ai/privacy-policy"
-                className="inline-flex items-center gap-2 px-6 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-xs border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all"
-              >
-                <FileText className="w-4 h-4 opacity-60" /> Privacy Policy
-              </Link>
-            )}
+            <Link
+              to={app.privacyPolicyPath}
+              className="inline-flex items-center gap-2 px-6 py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-xs border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all"
+            >
+              <FileText className="w-4 h-4 opacity-60" /> Privacy Policy
+            </Link>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 py-10 border-y border-white/5">
@@ -343,17 +344,6 @@ function DetailStat({ label, value }: { label: string, value: string }) {
     <div>
       <p className="text-[10px] opacity-30 uppercase font-black tracking-[0.2em] mb-2">{label}</p>
       <p className="text-4xl font-black tracking-tighter">{value}</p>
-    </div>
-  );
-}
-
-function Stat({ label, value, icon }: { label: string, value: string, icon: React.ReactNode }) {
-  return (
-    <div>
-      <p className="text-xs opacity-40 uppercase font-bold tracking-widest mb-1 flex items-center gap-1">
-        {label}
-      </p>
-      <p className="text-3xl font-bold tracking-tighter">{value}</p>
     </div>
   );
 }
