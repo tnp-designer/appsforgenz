@@ -5,7 +5,9 @@ import { ClerkProvider, AuthenticateWithRedirectCallback } from '@clerk/clerk-re
 import App from './App.tsx';
 import OrangeAIPrivacyPolicy from './OrangeAIPrivacyPolicy.tsx';
 import LLmlitePrivacyPolicy from './LLmlitePrivacyPolicy.tsx';
+import SuperShopPrivacyPolicy from './SuperShopPrivacyPolicy.tsx';
 import './index.css';
+import TaplinkPrivacypolicy from './TaplinkPrivacypolicy.tsx';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkEnabled =
@@ -27,6 +29,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/" element={<App />} />
             <Route path="/orange-ai/privacy-policy" element={<OrangeAIPrivacyPolicy />} />
             <Route path="/llmlite/privacy-policy" element={<LLmlitePrivacyPolicy />} />
+            <Route path="/taplink/privacy-policy" element={<TaplinkPrivacypolicy />} />
+            <Route path="/supershop/privacy-policy" element={<SuperShopPrivacyPolicy />} />
 
             <Route path="/sso-callback" element={<AuthenticateWithRedirectCallback />} />
           </Routes>
@@ -38,6 +42,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<App />} />
           <Route path="/orange-ai/privacy-policy" element={<OrangeAIPrivacyPolicy />} />
           <Route path="/llmlite/privacy-policy" element={<LLmlitePrivacyPolicy />} />
+          <Route path="/taplink/privacy-policy" element={<TaplinkPrivacypolicy />} />
+          <Route path="/supershop/privacy-policy" element={<SuperShopPrivacyPolicy />} />
         </Routes>
       </BrowserRouter>
     )}
